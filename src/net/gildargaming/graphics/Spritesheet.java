@@ -7,15 +7,16 @@ import javax.imageio.ImageIO;
 
 public class Spritesheet {
 	private String path;
-	private int SIZE;
+	private final int SIZE;
 	
-	private int[] pixels;
+	public int[] pixels;
 	
-	public void SpriteSHeet(String path, int size) {
+	public static Spritesheet stsheet = new Spritesheet("/sprites/runningGrant.png", 2048);
+	public Spritesheet(String path, int size) {
 		SIZE = size;
 		this.path = path;
 		pixels = new int[SIZE*SIZE];
-		
+		load();
 	}
 	
 	private void load() {

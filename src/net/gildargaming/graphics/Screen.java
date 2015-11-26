@@ -22,7 +22,7 @@ public class Screen {
 	public void render() {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				pixels[x + y*width] = tiles[(x >> 4) + (y >> 4) * 64];
+				pixels[x + y*width] = Sprite.currentsprite.pixels[(x & 15) + (y & 15) * Sprite.currentsprite.getSize()];
 				
 			}
 		}

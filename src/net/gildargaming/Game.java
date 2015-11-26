@@ -6,11 +6,17 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.input.*;
 
 public class Game extends Canvas {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JFrame gameWindow;
 	public static int width = 300;
 	public static int height = width * 4/3;
@@ -55,7 +61,7 @@ public class Game extends Canvas {
 		this.gameWindow.add(this);
 		this.gameWindow.setVisible(true);
 		this.gameWindow.setSize(size);
-		
+		this.gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 	
 	public void update() {
@@ -116,6 +122,7 @@ public class Game extends Canvas {
 				timer += 1000;
 				numUpdates = 0;
 				numFrames = 0;
+				
 			}
 		}
 
