@@ -6,7 +6,7 @@ public class Sprite {
 	private int x,y;
 	public int[] pixels;
 	private Spritesheet sheet;
-	public static Sprite currentsprite = new Sprite(0,0,32,Spritesheet.stsheet);
+	public static Sprite currentsprite = new Sprite(0,0,16,Spritesheet.stsheet);
 	public int test;
 	
 	Sprite(int x, int y, int size, Spritesheet sheet) {
@@ -21,7 +21,7 @@ public class Sprite {
 	private void loadSprite() {
 		for (y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * SIZE ];
+				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getSize() ];
 				
 				
 			}
