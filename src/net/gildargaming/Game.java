@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.input.*;
+import net.gildargaming.world.FixedWorld;
 
 public class Game extends Canvas {
 
@@ -18,8 +19,8 @@ public class Game extends Canvas {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JFrame gameWindow;
-	public static int width = 300;
-	public static int height = width * 4/3;
+	public static int width = 320	;
+	public static int height = width * (3/2);
 	public static int scale = 2;
 	public boolean running = false;
 	private BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -28,7 +29,7 @@ public class Game extends Canvas {
 	private int[] pixels = ((DataBufferInt)bImage.getRaster().getDataBuffer()).getData();
 	private Screen screen;
 	private Keyboard kb;
-	
+	private FixedWorld level;
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -50,6 +51,7 @@ public class Game extends Canvas {
 		this.startWindow();
 		this.kb = new Keyboard();
 		addKeyListener(kb);
+		level = new FixedWorld("/background/stars.png");
 	}
 	//crates and opens the game window.
 	public void startWindow() {
@@ -75,6 +77,9 @@ public class Game extends Canvas {
 			createBufferStrategy(3);
 			return;
 		}
+		
+		screen.clear();
+		level.render(0,0,screen);
 		screen.render();
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
