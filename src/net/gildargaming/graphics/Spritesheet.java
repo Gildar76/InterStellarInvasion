@@ -11,7 +11,7 @@ public class Spritesheet {
 	
 	public int[] pixels;
 	
-	public static Spritesheet stsheet = new Spritesheet("/sprites/grid_github.png", 256);
+
 	public Spritesheet(String path, int size) {
 		SIZE = size;
 		this.path = path;

@@ -8,7 +8,10 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import net.gildargaming.entity.Player;
 import net.gildargaming.graphics.Screen;
+import net.gildargaming.graphics.Sprite;
+import net.gildargaming.graphics.Spritesheet;
 import net.gildargaming.input.*;
 import net.gildargaming.world.FixedWorld;
 
@@ -30,10 +33,13 @@ public class Game extends Canvas {
 	private Screen screen;
 	private Keyboard kb;
 	private FixedWorld level;
+	private Player player;
+	private int elapsedTimeMilisec = 0;
+	public static Spritesheet mobsheet = new Spritesheet("/sprites/grid_github.png", 256);	
+	public static Sprite playerSprite = new Sprite(0,0,16,mobsheet);	
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
-
 		this.initializeGame();
 	}
 		
@@ -44,6 +50,7 @@ public class Game extends Canvas {
 		scale = s;
 		screen = new Screen(width,height);
 		this.initializeGame();
+
 	}
 	
 	
@@ -52,22 +59,34 @@ public class Game extends Canvas {
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png");
+		player = new Player(0,0,playerSprite, kb);
 	}
 	//crates and opens the game window.
 	public void startWindow() {
+		//Game window stuff
 		Dimension size = new Dimension(width * scale, height * scale);
 		this.setPreferredSize(size);
 		this.gameWindow = new JFrame();
+		this.gameWindow.setSize(size);
 		this.gameWindow.setResizable(false);
+
 		this.gameWindow.setTitle(gameTitle);
 		this.gameWindow.add(this);
 		this.gameWindow.setVisible(true);
-		this.gameWindow.setSize(size);
+
 		this.gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		//Create player
+		
 	}
+	
+
 	
 	public void update() {
 		kb.updateKeyState();
+		System.out.println("in update");
+		player.update();
+		//player.render(screen);
+		
 		
 	}
 	
@@ -80,6 +99,7 @@ public class Game extends Canvas {
 		
 		screen.clear();
 		level.render(0,0,screen);
+		player.render(screen);
 		screen.render();
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
@@ -112,9 +132,12 @@ public class Game extends Canvas {
 			//Get current time to see if we need to update
 			long now = System.nanoTime();
 			delta += (now - prevTime) / tickTime;
+			
 			prevTime = now;
 			while (delta >= 1) {
-				update();				
+				this.elapsedTimeMilisec = (int)(delta * tickTime / 1000000);
+				update();
+				this.elapsedTimeMilisec = 0;
 				delta--;
 				numUpdates++;
 			}

@@ -9,6 +9,10 @@ public class Screen {
 	public int[] pixels;
 	private int[] tiles = new int[64*64];
 	private Random rand;
+	private int xOffset = 0;
+	private int yOffset = 0;
+	
+	
 	public Screen(int w, int h) {
 		width = w;
 		height = h;
@@ -26,6 +30,31 @@ public class Screen {
 				
 			}
 		}
+	}
+	
+	public void renderObject(int xp, int yp, Sprite spr) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < spr.getSize(); y++) {
+			int ya = y + yp;
+			for ( int x = 0; x < spr.getSize(); x++) {
+				int xa = x + xp;
+				pixels[xa + ya * width] = spr.pixels[x + y * 16];
+				
+			}
+		}
+	}
+	
+	public void renderPlayer() {
+		
+		
+	}
+	
+
+	public void setOffset(int xOfset, int yOffset) {
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		
 	}
 	
 	public void clear() {

@@ -6,10 +6,10 @@ public class Sprite {
 	private int x,y;
 	public int[] pixels;
 	private Spritesheet sheet;
-	public static Sprite currentsprite = new Sprite(0,0,16,Spritesheet.stsheet);
+
 	public int test;
 	
-	Sprite(int x, int y, int size, Spritesheet sheet) {
+	public Sprite(int x, int y, int size, Spritesheet sheet) {
 		SIZE = size;
 		pixels = new int[SIZE*SIZE];
 		this.x = x * SIZE;
