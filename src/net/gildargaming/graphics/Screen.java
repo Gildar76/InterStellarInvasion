@@ -36,10 +36,14 @@ public class Screen {
 		xp -= xOffset;
 		yp -= yOffset;
 		for (int y = 0; y < spr.getSize(); y++) {
+
 			int ya = y + yp;
 			for ( int x = 0; x < spr.getSize(); x++) {
+
+				
 				int xa = x + xp;
-				pixels[xa + ya * width] = spr.pixels[x + y * 16];
+				
+				pixels[xa + ya * width] = spr.pixels[x + y * spr.getSize()];
 				
 			}
 		}

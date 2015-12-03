@@ -83,8 +83,9 @@ public class Game extends Canvas {
 	
 	public void update() {
 		kb.updateKeyState();
-		System.out.println("in update");
-		player.update();
+		//System.out.println(kb.left);
+		//System.out.println(kb.right);
+		player.update(elapsedTimeMilisec);
 		//player.render(screen);
 		
 		
