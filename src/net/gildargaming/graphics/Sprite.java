@@ -14,16 +14,19 @@ public class Sprite {
 		pixels = new int[SIZE*SIZE];
 		this.x = x * SIZE;
 		this.y = y * SIZE;
+
 		this.sheet = sheet;
 		loadSprite();
 	}
 	
 	private void loadSprite() {
-		for (y = 0; y < SIZE; y++) {
+		System.out.println(this.y);
+		System.out.println("trasig");
+		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getSize() ];
 				
-				
+				System.out.println(this.y);
 			}
 		}
 		this.test = SIZE;

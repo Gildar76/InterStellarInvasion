@@ -8,6 +8,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
@@ -35,8 +36,10 @@ public class Game extends Canvas {
 	private FixedWorld level;
 	private Player player;
 	private int elapsedTimeMilisec = 0;
-	public static Spritesheet mobsheet = new Spritesheet("/sprites/grid_github.png", 256);	
-	public static Sprite playerSprite = new Sprite(0,0,16,mobsheet);	
+	public static Spritesheet mobsheet = new Spritesheet("/sprites/mobs.png", 512);	
+	public static Sprite playerSprite = new Sprite(0,31,16,mobsheet);
+	public static Sprite invaderSprite = new Sprite(0,0,16,mobsheet);	
+	Invadergroup invGroup;
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -59,7 +62,11 @@ public class Game extends Canvas {
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png");
-		player = new Player(0,0,playerSprite, kb);
+		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb);
+		invGroup = new Invadergroup(10, 25, 10, 10);
+		for (int i = 0; i < 8; i++) {
+			invGroup.addInvader(invaderSprite);
+		}
 	}
 	//crates and opens the game window.
 	public void startWindow() {
@@ -87,7 +94,7 @@ public class Game extends Canvas {
 		//System.out.println(kb.right);
 		player.update(elapsedTimeMilisec);
 		//player.render(screen);
-		
+		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth());
 		
 	}
 	
@@ -101,6 +108,7 @@ public class Game extends Canvas {
 		screen.clear();
 		level.render(0,0,screen);
 		player.render(screen);
+		invGroup.renderGroup(screen);
 		screen.render();
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
