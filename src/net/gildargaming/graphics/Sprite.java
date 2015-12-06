@@ -20,15 +20,13 @@ public class Sprite {
 	}
 	
 	private void loadSprite() {
-
+		//Loads the sprite from the spritesheet into the pixel array.
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getSize() ];
-				
-				System.out.println(this.y);
 			}
 		}
-		this.test = SIZE;
+
 	}
 	
 	public int getSize() {
