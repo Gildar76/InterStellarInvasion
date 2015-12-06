@@ -20,8 +20,7 @@ public class Sprite {
 	}
 	
 	private void loadSprite() {
-		System.out.println(this.y);
-		System.out.println("trasig");
+
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getSize() ];
