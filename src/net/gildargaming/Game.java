@@ -62,10 +62,10 @@ public class Game extends Canvas {
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png");
-		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb);
+		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite);
 		invGroup = new Invadergroup(10, 25, 10, 10);
 		for (int i = 0; i < 8; i++) {
-			invGroup.addInvader(invaderSprite);
+			invGroup.addInvader(invaderSprite, level.invaderProjectileSprite );
 		}
 	}
 	//crates and opens the game window.
@@ -94,7 +94,7 @@ public class Game extends Canvas {
 		//System.out.println(kb.right);
 		player.update(elapsedTimeMilisec, level);
 		//player.render(screen);
-		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth());
+		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
 		level.update(elapsedTimeMilisec);
 	}
 	

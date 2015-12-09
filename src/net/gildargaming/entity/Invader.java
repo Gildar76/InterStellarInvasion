@@ -7,8 +7,8 @@ public class Invader extends Mob {
 	
 	double shootingDelay;
 
-	public Invader(int x, int y, Sprite sprite) {
-		super(x, y, sprite);
+	public Invader(int x, int y, Sprite sprite, Sprite projectileSprite) {
+		super(x, y, sprite, projectileSprite );
 		this.shootingDelay = rand.nextDouble() * 3 + 0.5;
 		this.direction = Direction.RIGHT;
 		

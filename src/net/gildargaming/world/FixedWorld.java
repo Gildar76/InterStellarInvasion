@@ -26,7 +26,7 @@ public class FixedWorld extends World {
 		load();
 		
 		projectileList = new HashSet<Projectile>();
-		playerProjectileSprite = new Sprite(1, 1,8,this.projectileSheet);
+		playerProjectileSprite = new Sprite(0, 1,8,this.projectileSheet);
 		invaderProjectileSprite = new Sprite(1, 0,8,this.projectileSheet);			
 	}
 	

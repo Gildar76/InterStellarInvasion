@@ -5,6 +5,7 @@ import java.util.List;
 import net.gildargaming.entity.*;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
+import net.gildargaming.world.FixedWorld;
 
 
 public class Invadergroup {
@@ -26,7 +27,7 @@ public class Invadergroup {
 		
 	}
 
-	public void addInvader(Sprite sprite) {
+	public void addInvader(Sprite sprite, Sprite projectileSprite) {
 		//Get position of last invader before adding the new one.
 		int invaderPosX = 0;
 		int invaderPosY = 0;
@@ -39,16 +40,16 @@ public class Invadergroup {
 		}
 
 	
-		invaders.add(new Invader(invaderPosX, invaderPosY, sprite));
+		invaders.add(new Invader(invaderPosX, invaderPosY, sprite, projectileSprite ));
 		
 		
 	}
 	
-	public void updateGroup(int elapsedTimeMilisec, int left, int right) {
+	public void updateGroup(int elapsedTimeMilisec, int left, int right, FixedWorld level) {
 		int maxRight = 0; //keeps track of the right boundary of the invadergroup
 		int maxLeft = 99999;
 		for (Invader inv : invaders) {
-			inv.update(elapsedTimeMilisec);
+			inv.update(elapsedTimeMilisec, level);
 			if (inv.x + inv.getWith() > maxRight) {
 				maxRight = inv.x + inv.getWith();
 		

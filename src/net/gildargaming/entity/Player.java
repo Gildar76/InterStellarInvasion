@@ -9,12 +9,13 @@ import net.gildargaming.world.World;
 public class Player extends Mob {
 	
 	private Keyboard input;
+
 	
-	
-	public Player(int x, int y, Sprite sprite, Keyboard input) {
-		super(x,y,sprite);
+	public Player(int x, int y, Sprite sprite, Keyboard input, Sprite projectileSprite) {
+		super(x,y,sprite, projectileSprite);
 		//this.x = x;
 		//this.y = y;
+		this.timeUntilNextShot = 0;
 		this.input = input;
 		//this.sprite = sprite;
 	}
@@ -24,20 +25,18 @@ public class Player extends Mob {
 		//System.out.println(input.right);
 		if (input.left) direction = Direction.LEFT;
 		if (input.right) direction = Direction.RIGHT;
-		if (input.space) shoot(level);
+		if (input.space) shoot(level, false, 0);
 		//System.out.println(this.direction);
 		
 		
 		this.move(eleapsedTimeMilisec);
-		
+		this.timeUntilNextShot -= (double)(eleapsedTimeMilisec);
 		direction = Direction.NONE;
 		
 		
 	}
 	
-	private void shoot(FixedWorld level) {
-		level.projectileList.add(new Projectile(x, y, level.playerProjectileSprite, 0.1, 0  ));
-	}
+
 	
 	
 }
