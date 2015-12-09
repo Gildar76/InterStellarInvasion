@@ -92,10 +92,10 @@ public class Game extends Canvas {
 		kb.updateKeyState();
 		//System.out.println(kb.left);
 		//System.out.println(kb.right);
-		player.update(elapsedTimeMilisec);
+		player.update(elapsedTimeMilisec, level);
 		//player.render(screen);
 		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth());
-		
+		level.update(elapsedTimeMilisec);
 	}
 	
 	public void render() {

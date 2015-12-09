@@ -2,22 +2,32 @@ package net.gildargaming.world;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
+import net.gildargaming.entity.Projectile;
 import net.gildargaming.graphics.Screen;
+import net.gildargaming.graphics.Sprite;
+import net.gildargaming.graphics.Spritesheet;
 
 public class FixedWorld extends World {
 	
 	public int[] pixels;
 	public String path;
-	
+	public HashSet<Projectile> projectileList;
+	public Spritesheet projectileSheet = new Spritesheet("/sprites/projectiles.png", 64);
+	public Sprite playerProjectileSprite;
+	public Sprite invaderProjectileSprite;
 	
 	public FixedWorld(String path) {
 		super();
 		this.path = path;
 		load();
 		
+		projectileList = new HashSet<Projectile>();
+		playerProjectileSprite = new Sprite(1, 1,8,this.projectileSheet);
+		invaderProjectileSprite = new Sprite(1, 0,8,this.projectileSheet);			
 	}
 	
 	public void load() {
@@ -36,12 +46,21 @@ public class FixedWorld extends World {
 		
 	}
 	
+	public void update(int elapsedTimeMilisec) {
+		for (Projectile p : projectileList) {
+			p.update(elapsedTimeMilisec);
+			//System.out.println("Updating level");
+		}
+
+	}
+	
+	
 	public void render(int xOffset, int yOffset, Screen screen) {
 		int x0 = xOffset;
 		int y0 = yOffset;
 		int x1 = x0 + screen.getWidth();
 		int y1 = y0 + screen.getHeight();
-		
+
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				screen.pixels[x + y * screen.getWidth()] = pixels[x + y * width];
@@ -49,6 +68,9 @@ public class FixedWorld extends World {
 				
 				
 			}
+		}
+		for (Projectile p : projectileList) {
+			p.render(screen);
 		}
 	}
 

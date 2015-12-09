@@ -35,6 +35,8 @@ public abstract class Mob extends Entity {
 
 		if (direction == Direction.LEFT) x -= (int)(velocity * eleapsedTimeMilisec);
 		if (direction == Direction.RIGHT) x += (int)(velocity * eleapsedTimeMilisec);		 
+		if (direction == Direction.UP) y -= (int)(velocity * eleapsedTimeMilisec);
+		if (direction == Direction.DOWN) y += (int)(velocity * eleapsedTimeMilisec);		 
 		right = x + width;
 		bottom = y + height;
 	}
