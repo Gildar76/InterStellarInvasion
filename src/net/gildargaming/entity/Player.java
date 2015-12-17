@@ -10,6 +10,7 @@ public class Player extends Mob {
 	
 	private Keyboard input;
 
+
 	
 	public Player(int x, int y, Sprite sprite, Keyboard input, Sprite projectileSprite) {
 		super(x,y,sprite, projectileSprite);
@@ -17,6 +18,7 @@ public class Player extends Mob {
 		//this.y = y;
 		this.timeUntilNextShot = 0;
 		this.input = input;
+		this.clamp = true;
 		//this.sprite = sprite;
 	}
 	//Maybe should change fixedworld to world 

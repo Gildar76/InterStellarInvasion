@@ -14,7 +14,7 @@ public abstract class Mob extends Entity {
 	protected double velocity = 0.1;
 	protected int width, height, right, bottom;
 
-	protected boolean wrap = false; //Setting this to true will cause the Mob to wrap arpound the screen.
+	protected boolean clamp = false; //Setting this to true will allow the mob to leave the screen.
 	
 	protected Direction direction;
 	protected final int SHOOTDELAY = 1;
@@ -22,12 +22,9 @@ public abstract class Mob extends Entity {
 	Sprite projectileSprite;	
 	
 	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite) {
-		this.x = x;
-		this.y = y;
-		this.sprite = sprite;
+		this(x,y,sprite);
 		this.projectileSprite = projectileSprite;
-		this.width = sprite.getSize();
-		this.height = sprite.getSize();
+
 		
 	}
 
@@ -35,8 +32,6 @@ public abstract class Mob extends Entity {
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;
-
-
 		this.width = sprite.getSize();
 		this.height = sprite.getSize();
 		
@@ -74,11 +69,16 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void render(Screen screen) {
-		if (!wrap) {
+		if (clamp) {
 			x = (x < 0) ? 0 : ((x > screen.getWidth() - sprite.getSize()) ? screen.getWidth() - sprite.getSize() : x);
 			y = (y < 0) ? 0 : ((y > screen.getHeight() - sprite.getSize()) ? screen.getHeight() - sprite.getSize() : y);
 		}
-		screen.renderObject(x, y, sprite);
+		if (y + height < 0 || x + width < 0 || x > screen.getWidth() || y > screen.getHeight()) {
+			this.removed = true;
+		} else {
+			screen.renderObject(x, y, sprite);			
+		}
+
 	}
 	
 	public int getWith() {
@@ -95,7 +95,7 @@ public abstract class Mob extends Entity {
 		if (timeUntilNextShot > 0) return;
 		level.projectileList.add(new Projectile(x, y, projectileSprite , 0.1, angle  ));
 		if (useRandomDelay) {
-			timeUntilNextShot = this.rand.nextInt(SHOOTDELAY) * 1000;
+			timeUntilNextShot = this.rand.nextInt(SHOOTDELAY * 5) * 1000;
 		} else {
 			timeUntilNextShot = this.SHOOTDELAY * 1000;			
 		}

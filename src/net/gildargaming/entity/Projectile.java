@@ -13,6 +13,8 @@ public class Projectile extends Mob {
 		super(x, y, sprite);
 		this.velocity = velocity;
 		this.angle = angle;
+		this.clamp = false;
+		
 
 		
 	}

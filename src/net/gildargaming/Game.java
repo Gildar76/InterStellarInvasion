@@ -23,6 +23,7 @@ public class Game extends Canvas {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JFrame gameWindow;
+	public static final int GROUPSIZE = 8;
 	public static int width = 320	;
 	public static int height = width * (3/2);
 	public static int scale = 2;
@@ -63,8 +64,8 @@ public class Game extends Canvas {
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png");
 		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite);
-		invGroup = new Invadergroup(10, 25, 10, 10);
-		for (int i = 0; i < 8; i++) {
+		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
+		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
 			invGroup.addInvader(invaderSprite, level.invaderProjectileSprite );
 		}
 	}

@@ -14,15 +14,16 @@ public class Invadergroup {
 	public int topLeftX;
 	public int topLeftY;
 	public int distX, distY;
+	private int groupSize;
 	
-	public Invadergroup(int topLeftX, int topLeftY, int distX, int distY) {
+	public Invadergroup(int topLeftX, int topLeftY, int distX, int distY, int groupSize) {
 		this.topLeftX = topLeftX;
 		this.topLeftY = topLeftY;
 		this.invadorCount = 0;
 		this.distX = distX;
 		this.distY = distY;
 		this.invaders = new ArrayList<Invader>();
-		
+		this.groupSize = groupSize;
 		
 		
 	}
@@ -33,13 +34,21 @@ public class Invadergroup {
 		int invaderPosY = 0;
 		if (this.invaders.size() > 0) {
 			invaderPosX = invaders.get(invaders.size() - 1).x + invaders.get(invaders.size() - 1).getWith() + distX;
-			//invaderPosY = invaders.get(invaders.size() - 1).y + invaders.get(invaders.size() - 1).getHeight();
-			invaderPosY = 0;
+			invaderPosY = invaders.get(invaders.size() - 1).y;
 			
+			//invaderPosY = 0;
+		
+			if ((this.invaders.size()) % groupSize == 0) {
+				System.out.println("inside if");
+				invaderPosY = invaders.get(invaders.size() - 1).y + invaders.get(invaders.size() - 1).getHeight() + distY;
+				invaderPosX = 0;
+			}
 			
 		}
-
-	
+		System.out.println((this.invaders.size()) % groupSize);
+		System.out.println(this.invaders.size());
+		System.out.println(invaderPosX);
+		System.out.println(invaderPosY);
 		invaders.add(new Invader(invaderPosX, invaderPosY, sprite, projectileSprite ));
 		
 		
