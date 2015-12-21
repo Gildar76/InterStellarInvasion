@@ -17,9 +17,10 @@ public abstract class Mob extends Entity {
 	protected boolean clamp = false; //Setting this to true will allow the mob to leave the screen.
 	
 	protected Direction direction;
-	protected final int SHOOTDELAY = 1;
+	protected int shootDelay = 1;
 	protected double timeUntilNextShot;
-	Sprite projectileSprite;	
+	protected Sprite projectileSprite;	
+	protected int timeSinceLastMove = 0;
 	
 	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite) {
 		this(x,y,sprite);
@@ -41,17 +42,27 @@ public abstract class Mob extends Entity {
 		
 	}
 	
-	public void move(int eleapsedTimeMilisec) {
+	public void move(int elapsedTimeMilisec) {
 
-		if (direction == Direction.LEFT) x -= (int)(velocity * eleapsedTimeMilisec);
-		if (direction == Direction.RIGHT) x += (int)(velocity * eleapsedTimeMilisec);		 
-		if (direction == Direction.UP) y -= (int)(velocity * eleapsedTimeMilisec);
-		if (direction == Direction.DOWN) y += (int)(velocity * eleapsedTimeMilisec);		 
-		right = x + width;
-		bottom = y + height;
+		//System.out.println(elapsedTimeMilisec);
+		if (velocity * (elapsedTimeMilisec) >= 1.0) {
+			if (direction == Direction.LEFT) x -= (int)(velocity * elapsedTimeMilisec);
+			if (direction == Direction.RIGHT) x += (int)(velocity * elapsedTimeMilisec);		 
+			if (direction == Direction.UP) y -= (int)(velocity * elapsedTimeMilisec);
+			if (direction == Direction.DOWN) y += (int)(velocity * elapsedTimeMilisec);		 
+			right = x + width;
+			bottom = y + height;
+			timeSinceLastMove = 0;
+		} else {
+			//System.out.println(velocity * elapsedTimeMilisec);
+			this.timeSinceLastMove += elapsedTimeMilisec;
+			//System.out.println(this.timeSinceLastMove);
+			
+		}
 	}
 	
 	public void update(int elapsedTimeMilisec, FixedWorld level) {
+		elapsedTimeMilisec += this.timeSinceLastMove;
 		this.move(elapsedTimeMilisec);
 		this.timeUntilNextShot -= elapsedTimeMilisec;
 		this.shoot(level, true, 180);
@@ -60,7 +71,7 @@ public abstract class Mob extends Entity {
 	
 	public void update(int eleapsedTimeMilisec) {
 		this.move(eleapsedTimeMilisec);
-		//System.out.println("In update no shooting");
+
 	}
 
 	
@@ -95,11 +106,13 @@ public abstract class Mob extends Entity {
 		if (timeUntilNextShot > 0) return;
 		level.projectileList.add(new Projectile(x, y, projectileSprite , 0.1, angle  ));
 		if (useRandomDelay) {
-			timeUntilNextShot = this.rand.nextInt(SHOOTDELAY * 5) * 1000;
+			timeUntilNextShot = this.rand.nextInt(this.shootDelay + 1) * 1000;
+
+		
 		} else {
-			timeUntilNextShot = this.SHOOTDELAY * 1000;			
+			timeUntilNextShot = this.shootDelay * 1000;			
 		}
 
-		System.out.println(this.timeUntilNextShot);
+
 	}
 }

@@ -2,6 +2,7 @@ package net.gildargaming.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.gildargaming.Direction;
 import net.gildargaming.entity.*;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
@@ -15,6 +16,7 @@ public class Invadergroup {
 	public int topLeftY;
 	public int distX, distY;
 	private int groupSize;
+	private int moveCounter = 0;
 	
 	public Invadergroup(int topLeftX, int topLeftY, int distX, int distY, int groupSize) {
 		this.topLeftX = topLeftX;
@@ -39,16 +41,13 @@ public class Invadergroup {
 			//invaderPosY = 0;
 		
 			if ((this.invaders.size()) % groupSize == 0) {
-				System.out.println("inside if");
+				//System.out.println("inside if");
 				invaderPosY = invaders.get(invaders.size() - 1).y + invaders.get(invaders.size() - 1).getHeight() + distY;
 				invaderPosX = 0;
 			}
 			
 		}
-		System.out.println((this.invaders.size()) % groupSize);
-		System.out.println(this.invaders.size());
-		System.out.println(invaderPosX);
-		System.out.println(invaderPosY);
+
 		invaders.add(new Invader(invaderPosX, invaderPosY, sprite, projectileSprite ));
 		
 		
@@ -57,6 +56,7 @@ public class Invadergroup {
 	public void updateGroup(int elapsedTimeMilisec, int left, int right, FixedWorld level) {
 		int maxRight = 0; //keeps track of the right boundary of the invadergroup
 		int maxLeft = 99999;
+		//Create hashset to reload 
 		for (Invader inv : invaders) {
 			inv.update(elapsedTimeMilisec, level);
 			if (inv.x + inv.getWith() > maxRight) {
@@ -70,15 +70,40 @@ public class Invadergroup {
 
 			
 		}
-		if (maxRight >= right - 5 || maxLeft <= left ) {
+		if (maxRight >= right - 5) {
+			moveCounter++;
 			for (Invader inv : invaders) {
-				inv.ChangeDirection();
+				inv.setDirection(Direction.LEFT);
+				
 
 			}
-			//System.out.println(right);
-			//System.out.println(right);
-		}
 
+		} else if (maxLeft <= left) {
+			moveCounter++;
+			for (Invader inv : invaders) {
+				inv.setDirection(Direction.RIGHT);
+				
+
+			}			
+		}
+		
+		if (moveCounter > 10) {
+			for (Invader inv : invaders) {
+				inv.y += this.distY;
+				
+			}
+			moveCounter = 0;
+		}
+		
+		//System.out.println(maxLeft);
+		//System.out.println(left);
+		
+		//Remove inactive invaders
+		for (int i = this.invaders.size() - 1; i > 0; i--) {
+			if (invaders.get(i).isRemoved()) {
+				invaders.remove(i);
+			}
+		}
 	}
 	
 	public void renderGroup(Screen screen) {

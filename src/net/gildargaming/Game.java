@@ -91,8 +91,8 @@ public class Game extends Canvas {
 	
 	public void update() {
 		kb.updateKeyState();
-		//System.out.println(kb.left);
-		//System.out.println(kb.right);
+
+
 		player.update(elapsedTimeMilisec, level);
 		//player.render(screen);
 		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
@@ -129,7 +129,7 @@ public class Game extends Canvas {
 		long prevTime = System.nanoTime();
 		//Set the time of one "tick"
 		final double tickTime = 1000000000.0 / updateFreq;
-		System.out.print(tickTime);
+
 		double delta = 0;
 		//Test variable to help keep track of FPS
 		long timer = System.currentTimeMillis();
@@ -165,6 +165,7 @@ public class Game extends Canvas {
 		}
 
 	}
+	
 	
 	public static void main(String[] args) {
 		Game game = new Game();

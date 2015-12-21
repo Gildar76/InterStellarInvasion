@@ -2,6 +2,7 @@ package net.gildargaming.world;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.imageio.ImageIO;
@@ -15,7 +16,7 @@ public class FixedWorld extends World {
 	
 	public int[] pixels;
 	public String path;
-	public HashSet<Projectile> projectileList;
+	public ArrayList<Projectile> projectileList;
 	public Spritesheet projectileSheet = new Spritesheet("/sprites/projectiles.png", 64);
 	public Sprite playerProjectileSprite;
 	public Sprite invaderProjectileSprite;
@@ -25,7 +26,7 @@ public class FixedWorld extends World {
 		this.path = path;
 		load();
 		
-		projectileList = new HashSet<Projectile>();
+		projectileList = new ArrayList<Projectile>();
 		playerProjectileSprite = new Sprite(0, 1,8,this.projectileSheet);
 		invaderProjectileSprite = new Sprite(1, 0,8,this.projectileSheet);			
 	}
@@ -49,9 +50,14 @@ public class FixedWorld extends World {
 	public void update(int elapsedTimeMilisec) {
 		for (Projectile p : projectileList) {
 			p.update(elapsedTimeMilisec);
-			//System.out.println("Updating level");
-		}
 
+		}
+		//Remove inactive invaders
+		for (int i = this.projectileList.size() - 1; i > 0; i--) {
+			if (this.projectileList.get(i).isRemoved()) {
+				this.projectileList.remove(i);
+			}
+		}
 	}
 	
 	
@@ -74,4 +80,5 @@ public class FixedWorld extends World {
 		}
 	}
 
+	
 }
