@@ -80,5 +80,5 @@ public class FixedWorld extends World {
 		}
 	}
 
-	
+
 }

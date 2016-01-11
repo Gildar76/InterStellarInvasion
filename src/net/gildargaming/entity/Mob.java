@@ -1,6 +1,7 @@
 package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
+import net.gildargaming.ProjectileType;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.world.FixedWorld;
@@ -17,16 +18,17 @@ public abstract class Mob extends Entity {
 	protected boolean clamp = false; //Setting this to true will allow the mob to leave the screen.
 	
 	protected Direction direction;
-	protected int shootDelay = 1;
+	protected int shootDelay = 2;
 	protected double timeUntilNextShot;
 	protected Sprite projectileSprite;	
 	protected int timeSinceLastMove = 0;
+	protected ProjectileType projectileType = ProjectileType.ENEMY;
 	
 	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite) {
 		this(x,y,sprite);
 		this.projectileSprite = projectileSprite;
 
-		
+
 	}
 
 	public Mob(int x, int y, Sprite sprite) {
@@ -35,6 +37,7 @@ public abstract class Mob extends Entity {
 		this.sprite = sprite;
 		this.width = sprite.getSize();
 		this.height = sprite.getSize();
+
 		
 	}
 	public void startMoving(Direction dir) {
@@ -64,8 +67,9 @@ public abstract class Mob extends Entity {
 	public void update(int elapsedTimeMilisec, FixedWorld level) {
 		elapsedTimeMilisec += this.timeSinceLastMove;
 		this.move(elapsedTimeMilisec);
+		
 		this.timeUntilNextShot -= elapsedTimeMilisec;
-		this.shoot(level, true, 180);
+		this.shoot(level, true, 180, 0.1);
 		
 	}
 	
@@ -77,6 +81,11 @@ public abstract class Mob extends Entity {
 	
 	public boolean collision() {
 		return false;
+	}
+	
+	public boolean collisionWith(Mob m, int xOffset, int yOffset) {
+		return (right < m.x + xOffset || m.right - xOffset < x || bottom < m.y - yOffset || m.bottom - yOffset < y ) ? false : true;
+
 	}
 	
 	public void render(Screen screen) {
@@ -102,9 +111,9 @@ public abstract class Mob extends Entity {
 		
 	}
 	
-	protected void shoot(FixedWorld level, boolean useRandomDelay, int angle) {
+	protected void shoot(FixedWorld level, boolean useRandomDelay, int angle, double vel) {
 		if (timeUntilNextShot > 0) return;
-		level.projectileList.add(new Projectile(x, y, projectileSprite , 0.1, angle  ));
+		level.projectileList.add(new Projectile(x, y, projectileSprite , vel, angle, this.projectileType  ));
 		if (useRandomDelay) {
 			timeUntilNextShot = this.rand.nextInt(this.shootDelay + 1) * 1000;
 
@@ -115,4 +124,5 @@ public abstract class Mob extends Entity {
 
 
 	}
+
 }

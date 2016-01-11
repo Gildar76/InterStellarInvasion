@@ -1,6 +1,7 @@
 package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
+import net.gildargaming.ProjectileType;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.input.Keyboard;
 import net.gildargaming.world.FixedWorld;
@@ -20,6 +21,9 @@ public class Player extends Mob {
 		this.input = input;
 		this.clamp = true;
 		//this.sprite = sprite;
+		this.projectileType = ProjectileType.PLAYER;
+		this.velocity = 0.2;
+		shootDelay = 1;
 	}
 	//Maybe should change fixedworld to world 
 	public void update(int eleapsedTimeMilisec, FixedWorld level) {
@@ -27,7 +31,7 @@ public class Player extends Mob {
 		//System.out.println(input.right);
 		if (input.left) direction = Direction.LEFT;
 		if (input.right) direction = Direction.RIGHT;
-		if (input.space) shoot(level, false, 0);
+		if (input.space) shoot(level, false, 0, 0.2);
 		//System.out.println(this.direction);
 		
 		

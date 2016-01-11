@@ -90,6 +90,8 @@ public class Invadergroup {
 		if (moveCounter > 10) {
 			for (Invader inv : invaders) {
 				inv.y += this.distY;
+				inv.shootDelay = inv.shootDelay / 2;
+				System.out.println(inv.shootDelay);
 				
 			}
 			moveCounter = 0;

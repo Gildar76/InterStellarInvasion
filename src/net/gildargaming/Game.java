@@ -8,13 +8,16 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import net.gildargaming.entity.Invader;
 import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
+import net.gildargaming.entity.Projectile;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
 import net.gildargaming.input.*;
 import net.gildargaming.world.FixedWorld;
+
 
 public class Game extends Canvas {
 
@@ -97,6 +100,7 @@ public class Game extends Canvas {
 		//player.render(screen);
 		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
 		level.update(elapsedTimeMilisec);
+		resolveCollisions();
 	}
 	
 	public void render() {
@@ -166,6 +170,24 @@ public class Game extends Canvas {
 
 	}
 	
+	
+	public void resolveCollisions() {
+		//Check for collision with projectiles
+		for (Projectile p : level.projectileList) {
+			if (p.getType() == ProjectileType.ENEMY && p.collisionWith(player, 8, 18)) {
+				System.out.println("Player collision detected");
+			} else if (p.getType() == ProjectileType.PLAYER) {
+				for (Invader inv : this.invGroup.invaders) {
+					if (p.collisionWith(inv, 5, 10)) {
+						System.out.println("HIT!");
+						inv.remove();
+						p.remove();
+					}
+				}
+			}
+			
+		}
+	}	
 	
 	public static void main(String[] args) {
 		Game game = new Game();

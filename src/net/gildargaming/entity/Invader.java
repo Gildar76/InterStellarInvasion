@@ -9,10 +9,10 @@ public class Invader extends Mob {
 
 	public Invader(int x, int y, Sprite sprite, Sprite projectileSprite) {
 		super(x, y, sprite, projectileSprite );
-		this.shootDelay = rand.nextInt(120) + 10;
-		this.timeUntilNextShot = this.shootDelay;
+		this.shootDelay = rand.nextInt(500) + 50;
+		this.timeUntilNextShot = this.shootDelay * 100;
 		this.direction = Direction.RIGHT;
-		this.velocity = 0.05;
+		this.velocity = 0.04;
 	}
 
 	public void setDirection(Direction dir) {
