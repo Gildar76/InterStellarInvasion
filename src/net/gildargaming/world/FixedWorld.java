@@ -53,7 +53,7 @@ public class FixedWorld extends World {
 
 		}
 		//Remove inactive invaders
-		for (int i = this.projectileList.size() - 1; i > 0; i--) {
+		for (int i = this.projectileList.size() - 1; i >= 0; i--) {
 			if (this.projectileList.get(i).isRemoved()) {
 				this.projectileList.remove(i);
 			}

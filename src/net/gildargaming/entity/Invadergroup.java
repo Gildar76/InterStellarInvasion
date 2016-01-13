@@ -101,7 +101,7 @@ public class Invadergroup {
 		//System.out.println(left);
 		
 		//Remove inactive invaders
-		for (int i = this.invaders.size() - 1; i > 0; i--) {
+		for (int i = this.invaders.size() - 1; i >= 0; i--) {
 			if (invaders.get(i).isRemoved()) {
 				invaders.remove(i);
 			}
