@@ -65,7 +65,7 @@ public class Game extends Canvas {
 		this.startWindow();
 		this.kb = new Keyboard();
 		addKeyListener(kb);
-		level = new FixedWorld("/background/stars.png");
+		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
 		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite);
 		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
@@ -182,9 +182,11 @@ public class Game extends Canvas {
 						System.out.println("HIT!");
 						inv.remove();
 						p.remove();
+						continue;
 					}
 				}
 			}
+			//Wall collision will be done no matter what type the projectile is.			
 			
 		}
 	}	

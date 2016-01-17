@@ -8,6 +8,7 @@ import java.util.HashSet;
 import javax.imageio.ImageIO;
 
 import net.gildargaming.entity.Projectile;
+import net.gildargaming.entity.Wall;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
@@ -20,8 +21,9 @@ public class FixedWorld extends World {
 	public Spritesheet projectileSheet = new Spritesheet("/sprites/projectiles.png", 64);
 	public Sprite playerProjectileSprite;
 	public Sprite invaderProjectileSprite;
+	public ArrayList<Wall> walls;
 	
-	public FixedWorld(String path) {
+	public FixedWorld(String path, int width, int height) {
 		super();
 		this.path = path;
 		load();
@@ -29,6 +31,15 @@ public class FixedWorld extends World {
 		projectileList = new ArrayList<Projectile>();
 		playerProjectileSprite = new Sprite(0, 1,8,this.projectileSheet);
 		invaderProjectileSprite = new Sprite(1, 0,8,this.projectileSheet);			
+		walls = new ArrayList<Wall>();
+
+		walls.add(new Wall(width / 10*1, height - height / 8, 4, 15*15*200));
+		walls.add(new Wall(width / 10*3, height - height / 8, 4, 15*15*200));
+		walls.add(new Wall(width / 10 * 5, height - height / 8, 4, 15*15*200));
+		walls.add(new Wall(width / 10 * 7, height - height / 8, 4, 15*15*200));
+//		walls.add(new Wall(width / 10 * 9, height - height / 8, 4, 15*15*200));
+
+		
 	}
 	
 	public void load() {
@@ -77,6 +88,10 @@ public class FixedWorld extends World {
 		}
 		for (Projectile p : projectileList) {
 			p.render(screen);
+		}
+		for (Wall w : walls) {
+			w.render(screen);
+			
 		}
 	}
 

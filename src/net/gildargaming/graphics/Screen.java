@@ -49,6 +49,23 @@ public class Screen {
 		}
 	}
 	
+	public void renderSquare(int xp, int yp, int size, int color) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < size; y++) {
+
+			int ya = y + yp;
+			for ( int x = 0; x < size; x++) {
+
+				
+				int xa = x + xp;
+				if (xa + ya * width > pixels.length - 1 || xa + ya * width < 0) break;
+				pixels[xa + ya * width] = color;;
+				
+			}
+		}
+	}
+	
 	public void renderPlayer() {
 		
 		
