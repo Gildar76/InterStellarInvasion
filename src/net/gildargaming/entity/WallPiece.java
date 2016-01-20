@@ -19,4 +19,8 @@ public class WallPiece extends Entity {
 		screen.renderSquare(x, y, size, color);
 		//System.out.println("rendering wall");
 	}
+	public boolean collisionWith(Mob m, int xOffset, int yOffset) {
+		return (x+size < m.x + xOffset || m.right - xOffset < x || y+size < m.y - yOffset || m.bottom - yOffset < y ) ? false : true;
+
+	}
 }

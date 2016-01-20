@@ -12,6 +12,7 @@ import net.gildargaming.entity.Invader;
 import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
 import net.gildargaming.entity.Projectile;
+import net.gildargaming.entity.Wall;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
@@ -175,8 +176,10 @@ public class Game extends Canvas {
 		//Check for collision with projectiles
 		for (Projectile p : level.projectileList) {
 			if (p.getType() == ProjectileType.ENEMY && p.collisionWith(player, 8, 18)) {
-				System.out.println("Player collision detected");
+				//System.out.println("Player collision detected");
 			} else if (p.getType() == ProjectileType.PLAYER) {
+				//Wall collision will be done no matter what type the projectile is.			
+
 				for (Invader inv : this.invGroup.invaders) {
 					if (p.collisionWith(inv, 5, 10)) {
 						System.out.println("HIT!");
@@ -185,9 +188,15 @@ public class Game extends Canvas {
 						continue;
 					}
 				}
+
 			}
-			//Wall collision will be done no matter what type the projectile is.			
-			
+			for (Wall w : level.walls) {
+				if (w.collisionWith(p, 0, -4)) {
+					p.remove();
+					continue;
+				}
+
+			}			
 		}
 	}	
 	

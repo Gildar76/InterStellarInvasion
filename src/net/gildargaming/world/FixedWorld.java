@@ -69,6 +69,15 @@ public class FixedWorld extends World {
 				this.projectileList.remove(i);
 			}
 		}
+		for (Wall w : this.walls) {
+			w.clearPieces();
+		}
+		for (int i = this.walls.size() - 1; i >= 0; i--) {
+
+			if (walls.get(i).isRemoved()) {
+				walls.remove(i);
+			}
+		}
 	}
 	
 	
