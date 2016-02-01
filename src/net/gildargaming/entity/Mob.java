@@ -2,6 +2,7 @@ package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
 import net.gildargaming.ProjectileType;
+import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.world.FixedWorld;
@@ -23,11 +24,14 @@ public abstract class Mob extends Entity {
 	protected Sprite projectileSprite;	
 	protected int timeSinceLastMove = 0;
 	protected ProjectileType projectileType = ProjectileType.ENEMY;
+	protected SoundEffect shootSound;
+	protected SoundEffect explosionSound;
 	
-	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite) {
+	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
 		this(x,y,sprite);
 		this.projectileSprite = projectileSprite;
-
+		this.shootSound = shootSound;
+		this.explosionSound = explosionSound;
 
 	}
 
@@ -114,6 +118,7 @@ public abstract class Mob extends Entity {
 	protected void shoot(FixedWorld level, boolean useRandomDelay, int angle, double vel) {
 		if (timeUntilNextShot > 0) return;
 		level.projectileList.add(new Projectile(x, y, projectileSprite , vel, angle, this.projectileType  ));
+		shootSound.play();
 		if (useRandomDelay) {
 			timeUntilNextShot = this.rand.nextInt(this.shootDelay + 1) * 1000;
 
@@ -124,5 +129,9 @@ public abstract class Mob extends Entity {
 
 
 	}
-
+	public void remove() {
+		super.remove();
+		//this.explosionSound.play();
+		
+	}
 }

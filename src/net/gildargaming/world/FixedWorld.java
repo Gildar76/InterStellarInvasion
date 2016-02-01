@@ -33,7 +33,7 @@ public class FixedWorld extends World {
 		invaderProjectileSprite = new Sprite(1, 0,8,this.projectileSheet);			
 		walls = new ArrayList<Wall>();
 
-		walls.add(new Wall(width / 10*1, height - height / 8, 4, 15*15*200));
+		walls.add(new Wall(width / 10*1, height - height / 8, 4, 255*15*200));
 		walls.add(new Wall(width / 10*3, height - height / 8, 4, 15*15*200));
 		walls.add(new Wall(width / 10 * 5, height - height / 8, 4, 15*15*200));
 		walls.add(new Wall(width / 10 * 7, height - height / 8, 4, 15*15*200));

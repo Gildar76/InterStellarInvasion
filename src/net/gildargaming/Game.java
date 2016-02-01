@@ -8,6 +8,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.entity.Invader;
 import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
@@ -20,11 +21,12 @@ import net.gildargaming.input.*;
 import net.gildargaming.world.FixedWorld;
 
 
-public class Game extends Canvas {
+public class Game extends Canvas implements Runnable {
 
 	/**
 	 * 
 	 */
+	private Thread thread;
 	private static final long serialVersionUID = 1L;
 	private JFrame gameWindow;
 	public static final int GROUPSIZE = 8;
@@ -44,11 +46,15 @@ public class Game extends Canvas {
 	public static Spritesheet mobsheet = new Spritesheet("/sprites/mobs.png", 512);	
 	public static Sprite playerSprite = new Sprite(0,31,16,mobsheet);
 	public static Sprite invaderSprite = new Sprite(0,0,16,mobsheet);	
-	Invadergroup invGroup;
+	public Invadergroup invGroup;
+	public SoundEffect playerShootSound, playerExplosionSound; 
+	public SoundEffect wallHit, invaderExplosionSound, invaderExplosionSound2, invaderShootSound, hitWallSound;
+	
+	
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
-		this.initializeGame();
+
 	}
 		
 	//Constructor with settings
@@ -57,20 +63,48 @@ public class Game extends Canvas {
 		height = h;
 		scale = s;
 		screen = new Screen(width,height);
-		this.initializeGame();
+		//this.initializeGame();
 
 	}
 	
+	public synchronized void start() {
+		thread = new Thread(this);
+		running = true;		
+		this.initializeGame();
+		thread.start();
+	}
+	
+	public synchronized void stop() {
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public void initializeGame() {
 		this.startWindow();
+		this.playerShootSound = new SoundEffect("./res/sounds/playerMisile.wav");
+		this.invaderShootSound = new SoundEffect("./res/sounds/invaderShot1.wav");
+		this.invaderExplosionSound = new SoundEffect("./res/sounds/Explosion2.wav");
+		this.playerExplosionSound = new SoundEffect("./res/sounds/death.wav");
+		this.invaderExplosionSound2 = new SoundEffect("./res/sounds/Explosion3.wav");
+		this.wallHit = new SoundEffect("./res/sounds/wallHit.wav");
+		
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
-		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite);
+		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite, this.playerShootSound, this.playerExplosionSound);
 		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
-			invGroup.addInvader(invaderSprite, level.invaderProjectileSprite );
+			if (i % 2 == 0) {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );				
+			} else {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );								
+			}
+
 		}
 	}
 	//crates and opens the game window.
@@ -129,7 +163,7 @@ public class Game extends Canvas {
 	
 	//Initializes everything and starts the main game loop
 	public void run() {
-		running = true;
+
 		//Set a variable that stores the last time the update loop was run.
 		long prevTime = System.nanoTime();
 		//Set the time of one "tick"
@@ -202,6 +236,6 @@ public class Game extends Canvas {
 	
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.run();	
+		game.start();	
 	}
 }

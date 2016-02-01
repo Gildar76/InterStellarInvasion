@@ -1,14 +1,15 @@
 package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
+import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.graphics.Sprite;
 
 public class Invader extends Mob {
 	
 
 
-	public Invader(int x, int y, Sprite sprite, Sprite projectileSprite) {
-		super(x, y, sprite, projectileSprite );
+	public Invader(int x, int y, Sprite sprite, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
+		super(x, y, sprite, projectileSprite, shootSound, explosionSound );
 		this.shootDelay = rand.nextInt(500) + 50;
 		this.timeUntilNextShot = this.shootDelay * 100;
 		this.direction = Direction.RIGHT;

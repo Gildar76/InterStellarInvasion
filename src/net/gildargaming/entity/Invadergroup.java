@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.gildargaming.Direction;
+import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.entity.*;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
@@ -30,7 +31,7 @@ public class Invadergroup {
 		
 	}
 
-	public void addInvader(Sprite sprite, Sprite projectileSprite) {
+	public void addInvader(Sprite sprite, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
 		//Get position of last invader before adding the new one.
 		int invaderPosX = 0;
 		int invaderPosY = 0;
@@ -48,7 +49,7 @@ public class Invadergroup {
 			
 		}
 
-		invaders.add(new Invader(invaderPosX, invaderPosY, sprite, projectileSprite ));
+		invaders.add(new Invader(invaderPosX, invaderPosY, sprite, projectileSprite, shootSound, explosionSound ));
 		
 		
 	}
@@ -90,8 +91,8 @@ public class Invadergroup {
 		if (moveCounter > 10) {
 			for (Invader inv : invaders) {
 				inv.y += this.distY;
-				inv.shootDelay = inv.shootDelay / 2;
-				System.out.println(inv.shootDelay);
+				if (inv.shootDelay > 2.0)inv.shootDelay = inv.shootDelay / 2;
+				if (inv.velocity < 0.75)inv.velocity = inv.velocity * 1.2;
 				
 			}
 			moveCounter = 0;

@@ -2,6 +2,7 @@ package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
 import net.gildargaming.ProjectileType;
+import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.input.Keyboard;
 import net.gildargaming.world.FixedWorld;
@@ -13,8 +14,8 @@ public class Player extends Mob {
 
 
 	
-	public Player(int x, int y, Sprite sprite, Keyboard input, Sprite projectileSprite) {
-		super(x,y,sprite, projectileSprite);
+	public Player(int x, int y, Sprite sprite, Keyboard input, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
+		super(x,y,sprite, projectileSprite, shootSound, explosionSound);
 		//this.x = x;
 		//this.y = y;
 		this.timeUntilNextShot = 0;

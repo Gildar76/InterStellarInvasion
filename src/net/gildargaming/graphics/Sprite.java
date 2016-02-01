@@ -33,4 +33,15 @@ public class Sprite {
 		return SIZE;
 		
 	}
+	
+	public void replaceColor(int from, int to) {
+		System.out.println(this.pixels);
+		System.out.println(from);
+
+		for (int p : pixels) {
+			if (p == from) p = to;
+			System.out.println(p);
+		}
+		
+	}
 }
