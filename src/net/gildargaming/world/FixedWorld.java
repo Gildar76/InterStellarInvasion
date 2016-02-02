@@ -3,12 +3,13 @@ package net.gildargaming.world;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
+import net.gildargaming.Game;
 import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
+import net.gildargaming.graphics.Animation;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
@@ -22,11 +23,12 @@ public class FixedWorld extends World {
 	public Sprite playerProjectileSprite;
 	public Sprite invaderProjectileSprite;
 	public ArrayList<Wall> walls;
-	
+	public ArrayList<Animation> animations;
 	public FixedWorld(String path, int width, int height) {
 		super();
 		this.path = path;
 		load();
+		animations = new ArrayList<Animation>();
 		
 		projectileList = new ArrayList<Projectile>();
 		playerProjectileSprite = new Sprite(0, 1,8,this.projectileSheet);
@@ -63,6 +65,7 @@ public class FixedWorld extends World {
 			p.update(elapsedTimeMilisec);
 
 		}
+
 		//Remove inactive invaders
 		for (int i = this.projectileList.size() - 1; i >= 0; i--) {
 			if (this.projectileList.get(i).isRemoved()) {
@@ -72,10 +75,15 @@ public class FixedWorld extends World {
 		for (Wall w : this.walls) {
 			w.clearPieces();
 		}
+		for (Animation explosion : Game.explosionList) {
+			explosion.update(elapsedTimeMilisec);
+		}
 		for (int i = this.walls.size() - 1; i >= 0; i--) {
 
 			if (walls.get(i).isRemoved()) {
+
 				walls.remove(i);
+
 			}
 		}
 	}
@@ -101,6 +109,9 @@ public class FixedWorld extends World {
 		for (Wall w : walls) {
 			w.render(screen);
 			
+		}
+		for (Animation explosion : Game.explosionList) {
+			explosion.render(screen);
 		}
 	}
 

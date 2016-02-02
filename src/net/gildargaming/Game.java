@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -14,6 +16,7 @@ import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
 import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
+import net.gildargaming.graphics.Animation;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
@@ -47,10 +50,10 @@ public class Game extends Canvas implements Runnable {
 	public static Sprite playerSprite = new Sprite(0,31,16,mobsheet);
 	public static Sprite invaderSprite = new Sprite(0,0,16,mobsheet);	
 	public Invadergroup invGroup;
-	public SoundEffect playerShootSound, playerExplosionSound; 
-	public SoundEffect wallHit, invaderExplosionSound, invaderExplosionSound2, invaderShootSound, hitWallSound;
-	
-	
+	public static SoundEffect playerShootSound, playerExplosionSound; 
+	public static SoundEffect wallHit, invaderExplosionSound, invaderExplosionSound2, invaderShootSound, hitWallSound;
+	public static Spritesheet invaderExplosionSheet;
+	public static ArrayList<Animation> explosionList;
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -86,12 +89,15 @@ public class Game extends Canvas implements Runnable {
 	
 	public void initializeGame() {
 		this.startWindow();
-		this.playerShootSound = new SoundEffect("./res/sounds/playerMisile.wav");
-		this.invaderShootSound = new SoundEffect("./res/sounds/invaderShot1.wav");
-		this.invaderExplosionSound = new SoundEffect("./res/sounds/Explosion2.wav");
-		this.playerExplosionSound = new SoundEffect("./res/sounds/death.wav");
-		this.invaderExplosionSound2 = new SoundEffect("./res/sounds/Explosion3.wav");
-		this.wallHit = new SoundEffect("./res/sounds/wallHit.wav");
+		playerShootSound = new SoundEffect("./res/sounds/playerMisile.wav");
+		invaderShootSound = new SoundEffect("./res/sounds/invaderShot1.wav");
+		invaderExplosionSound = new SoundEffect("./res/sounds/Explosion2.wav");
+		playerExplosionSound = new SoundEffect("./res/sounds/death.wav");
+		invaderExplosionSound2 = new SoundEffect("./res/sounds/Explosion3.wav");
+		wallHit = new SoundEffect("./res/sounds/wallHit.wav");
+		invaderExplosionSheet = new Spritesheet("/sprites/explosion_spritesheet.png");
+		explosionList = new ArrayList<Animation>();
+		
 		
 		this.kb = new Keyboard();
 		addKeyListener(kb);
@@ -217,6 +223,10 @@ public class Game extends Canvas implements Runnable {
 				for (Invader inv : this.invGroup.invaders) {
 					if (p.collisionWith(inv, 5, 10)) {
 						System.out.println("HIT!");
+						Game.invaderExplosionSound.play();
+						//Start explosion
+						explosionList.add(new Animation(inv.getX(), inv.getY(), 16, 16, 0, 0, 8, invaderExplosionSheet, 0.05));
+						
 						inv.remove();
 						p.remove();
 						continue;
@@ -224,6 +234,10 @@ public class Game extends Canvas implements Runnable {
 				}
 
 			}
+			for (int i = explosionList.size() - 1 ; i >= 0; i--) {
+				if (explosionList.get(i).isRemoved()) explosionList.remove(i);
+			}
+			
 			for (Wall w : level.walls) {
 				if (w.collisionWith(p, 0, -4)) {
 					p.remove();

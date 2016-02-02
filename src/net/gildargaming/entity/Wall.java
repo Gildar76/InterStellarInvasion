@@ -2,6 +2,7 @@ package net.gildargaming.entity;
 
 import java.util.ArrayList;
 
+import net.gildargaming.Game;
 import net.gildargaming.graphics.Screen;
 
 public class Wall extends Entity {
@@ -76,6 +77,7 @@ public class Wall extends Entity {
 			for (WallPiece w : parts) {
 				if (w.collisionWith(m, xOffset, yOffset)) {
 					w.remove();
+					Game.wallHit.play();
 					//System.out.println("COLLISION");
 					//If we found the collision we can return here
 					return true;

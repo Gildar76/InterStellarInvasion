@@ -2,6 +2,7 @@ package net.gildargaming.entity;
 
 import java.util.Random;
 
+import net.gildargaming.Game;
 import net.gildargaming.graphics.Screen;
 
 public abstract class Entity {
@@ -28,4 +29,18 @@ public abstract class Entity {
 		return removed;
 		
 	}
+
+	public int getX() {
+		return x;
+	}
+
+
+
+	public int getY() {
+		return y;
+	}
+
+
+	
+	
 }

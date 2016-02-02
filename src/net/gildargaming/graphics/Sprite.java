@@ -23,7 +23,7 @@ public class Sprite {
 		//Loads the sprite from the spritesheet into the pixel array.
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getSize() ];
+				pixels[x + y * SIZE] = sheet.pixels[(this.x + x) + (y + this.y) * sheet.getWidth() ];
 			}
 		}
 
@@ -35,12 +35,12 @@ public class Sprite {
 	}
 	
 	public void replaceColor(int from, int to) {
-		System.out.println(this.pixels);
-		System.out.println(from);
+		//System.out.println(this.pixels);
+		//System.out.println(from);
 
 		for (int p : pixels) {
 			if (p == from) p = to;
-			System.out.println(p);
+			//System.out.println(p);
 		}
 		
 	}
