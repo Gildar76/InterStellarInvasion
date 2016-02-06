@@ -225,7 +225,7 @@ public class Game extends Canvas implements Runnable {
 						System.out.println("HIT!");
 						Game.invaderExplosionSound.play();
 						//Start explosion
-						explosionList.add(new Animation(inv.getX(), inv.getY(), 16, 16, 0, 0, 8, invaderExplosionSheet, 0.05));
+						explosionList.add(new Animation(inv.getX(), inv.getY(), 16, 16, 0, 2, 8,this.mobsheet, 0.05));
 						
 						inv.remove();
 						p.remove();

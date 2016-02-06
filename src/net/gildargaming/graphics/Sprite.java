@@ -39,7 +39,7 @@ public class Sprite {
 		//System.out.println(from);
 
 		for (int p : pixels) {
-			if (p == from) p = to;
+			//if (p == from) p = to;
 			//System.out.println(p);
 		}
 		

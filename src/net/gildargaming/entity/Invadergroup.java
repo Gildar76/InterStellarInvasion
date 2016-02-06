@@ -63,7 +63,6 @@ public class Invadergroup {
 			if (inv.x + inv.getWith() > maxRight) {
 				maxRight = inv.x + inv.getWith();
 		
-				
 			}
 			if (inv.x <= maxLeft) {
 				maxLeft = inv.x;

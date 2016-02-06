@@ -134,4 +134,12 @@ public abstract class Mob extends Entity {
 		//this.explosionSound.play();
 		
 	}
+	
+	public void setTimeUntilNextShot(int tuns) {
+		this.timeUntilNextShot = tuns;
+	}
+	
+	public int getTimeUntilNextShot() {
+		return this.timeUntilNextShot;
+	}
 }

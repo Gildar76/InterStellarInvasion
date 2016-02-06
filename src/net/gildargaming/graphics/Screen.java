@@ -43,7 +43,7 @@ public class Screen {
 				
 				int xa = x + xp;
 				if (xa + ya * width > pixels.length - 1 || xa + ya * width < 0) break;
-				pixels[xa + ya * width] = spr.pixels[x + y * spr.getSize()];
+				if (spr.pixels[x + y * spr.getSize()] != 0)  pixels[xa + ya * width] = spr.pixels[x + y * spr.getSize()];
 				
 			}
 		}
