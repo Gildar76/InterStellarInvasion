@@ -3,7 +3,7 @@ package net.gildargaming.graphics;
 public class Sprite {
 	
 	private final int SIZE;
-	private int x,y;
+	private int x,y, width, height;
 	public int[] pixels;
 	private Spritesheet sheet;
 
@@ -11,12 +11,30 @@ public class Sprite {
 	
 	public Sprite(int x, int y, int size, Spritesheet sheet) {
 		SIZE = size;
+		width = size;
+		height = size;
 		pixels = new int[SIZE*SIZE];
 		this.x = x * SIZE;
 		this.y = y * SIZE;
 
 		this.sheet = sheet;
 		loadSprite();
+	}
+
+	public Sprite(int width, int height, int[] pixels) {
+		SIZE = width;
+		this.width = width;
+		this.height = height;
+
+		x = 0;
+		y = 0;
+		this.pixels = new int[pixels.length];
+		for (int i = 0; i < pixels.length; i++) {
+			this.pixels[i] = pixels[i];
+			
+		}
+
+		
 	}
 	
 	private void loadSprite() {
@@ -39,7 +57,7 @@ public class Sprite {
 		//System.out.println(from);
 
 		for (int p : pixels) {
-			//if (p == from) p = to;
+			if (p == from) p = to;
 			//System.out.println(p);
 		}
 		

@@ -11,9 +11,10 @@ import net.gildargaming.world.World;
 public class Player extends Mob {
 	
 	private Keyboard input;
-
+	private int score;
 
 	
+
 	public Player(int x, int y, Sprite sprite, Keyboard input, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
 		super(x,y,sprite, projectileSprite, shootSound, explosionSound);
 		//this.x = x;
@@ -25,6 +26,7 @@ public class Player extends Mob {
 		this.projectileType = ProjectileType.PLAYER;
 		this.velocity = 0.2;
 		shootDelay = 1;
+		score = 0;
 	}
 	//Maybe should change fixedworld to world 
 	public void update(int eleapsedTimeMilisec, FixedWorld level) {
@@ -43,7 +45,10 @@ public class Player extends Mob {
 		
 	}
 	
-
-	
-	
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 }

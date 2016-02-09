@@ -17,6 +17,7 @@ import net.gildargaming.entity.Player;
 import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
 import net.gildargaming.graphics.Animation;
+import net.gildargaming.graphics.Font;
 import net.gildargaming.graphics.Screen;
 import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
@@ -54,6 +55,11 @@ public class Game extends Canvas implements Runnable {
 	public static SoundEffect wallHit, invaderExplosionSound, invaderExplosionSound2, invaderShootSound, hitWallSound;
 	public static Spritesheet invaderExplosionSheet;
 	public static ArrayList<Animation> explosionList;
+	public static Font font;
+	public Spritesheet fontSheet;
+	public static final int ALPHA_COLOR2 = -8454017;
+	public static final int ALPHA_COLOR = -65281;
+	
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -80,11 +86,10 @@ public class Game extends Canvas implements Runnable {
 	public synchronized void stop() {
 		try {
 			thread.join();
+			this.running = false;
 		} catch (InterruptedException e) {
-
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void initializeGame() {
@@ -96,9 +101,7 @@ public class Game extends Canvas implements Runnable {
 		invaderExplosionSound2 = new SoundEffect("./res/sounds/Explosion3.wav");
 		wallHit = new SoundEffect("./res/sounds/wallHit.wav");
 		invaderExplosionSheet = new Spritesheet("/sprites/explosion_spritesheet.png");
-		explosionList = new ArrayList<Animation>();
-		
-		
+		explosionList = new ArrayList<Animation>();	
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
@@ -112,6 +115,9 @@ public class Game extends Canvas implements Runnable {
 			}
 
 		}
+		System.out.println("initializing font sheet");
+		fontSheet = new Spritesheet("/fonts/arial.png");
+		font = new Font(fontSheet);
 	}
 	//crates and opens the game window.
 	public void startWindow() {
@@ -156,6 +162,7 @@ public class Game extends Canvas implements Runnable {
 		player.render(screen);
 		invGroup.renderGroup(screen);
 		screen.render();
+		font.render("SCORE",screen, 10, 10);
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 			
@@ -222,7 +229,8 @@ public class Game extends Canvas implements Runnable {
 
 				for (Invader inv : this.invGroup.invaders) {
 					if (p.collisionWith(inv, 5, 10)) {
-						System.out.println("HIT!");
+						player.setScore(player.getScore()+1);
+						
 						Game.invaderExplosionSound.play();
 						//Start explosion
 						explosionList.add(new Animation(inv.getX(), inv.getY(), 16, 16, 0, 2, 8,this.mobsheet, 0.05));

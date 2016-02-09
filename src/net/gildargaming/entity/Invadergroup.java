@@ -19,6 +19,7 @@ public class Invadergroup {
 	private int groupSize;
 	private int moveCounter = 0;
 	
+	
 	public Invadergroup(int topLeftX, int topLeftY, int distX, int distY, int groupSize) {
 		this.topLeftX = topLeftX;
 		this.topLeftY = topLeftY;

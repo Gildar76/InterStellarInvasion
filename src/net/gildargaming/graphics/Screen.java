@@ -3,6 +3,8 @@ package net.gildargaming.graphics
 
 import java.util.Random;
 
+import net.gildargaming.Game;
+
 public class Screen {
 	private int width;
 	private int height;
@@ -43,7 +45,8 @@ public class Screen {
 				
 				int xa = x + xp;
 				if (xa + ya * width > pixels.length - 1 || xa + ya * width < 0) break;
-				if (spr.pixels[x + y * spr.getSize()] != 0)  pixels[xa + ya * width] = spr.pixels[x + y * spr.getSize()];
+				int col = spr.pixels[x + y * spr.getSize()];
+				if ( col != 0 &&  col != Game.ALPHA_COLOR && col != Game.ALPHA_COLOR2)  pixels[xa + ya * width] = col;
 				
 			}
 		}

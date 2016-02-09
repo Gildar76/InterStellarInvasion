@@ -139,7 +139,7 @@ public abstract class Mob extends Entity {
 		this.timeUntilNextShot = tuns;
 	}
 	
-	public int getTimeUntilNextShot() {
+	public double getTimeUntilNextShot() {
 		return this.timeUntilNextShot;
 	}
 }
