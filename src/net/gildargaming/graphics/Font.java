@@ -13,8 +13,10 @@ public class Font {
 		this.sheet = sheet;
 		sprites = this.sheet.split(16, 16);
 		for (Sprite s : sprites) {
-			s.replaceColor(-16777216, 0xffffffff);
-			s.replaceColor(-65281, 0xffffffff);
+			s.replaceColor(0xff000000, 0xffffffff);
+			//s.replaceColor(-16777216, 0xffffffff);
+			//s.replaceColor(-65281, 0xffffffff);
+			//s.replaceColor(0, 0xffffffff);
 		}
 		
 	}

@@ -53,13 +53,13 @@ public class Sprite {
 	}
 	
 	public void replaceColor(int from, int to) {
-		//System.out.println(this.pixels);
-		//System.out.println(from);
 
-		for (int p : pixels) {
-			if (p == from) p = to;
-			//System.out.println(p);
+
+		for (int i = 0; i < this.pixels.length; i++) {
+			if (pixels[i] == from) pixels[i] = to;
 		}
+		
+
 		
 	}
 }

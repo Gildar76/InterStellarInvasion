@@ -11,7 +11,7 @@ import net.gildargaming.world.World;
 public class Player extends Mob {
 	
 	private Keyboard input;
-	private int score;
+	private int score, lives;
 
 	
 
@@ -27,6 +27,7 @@ public class Player extends Mob {
 		this.velocity = 0.2;
 		shootDelay = 1;
 		score = 0;
+		lives = 3;
 	}
 	//Maybe should change fixedworld to world 
 	public void update(int eleapsedTimeMilisec, FixedWorld level) {
@@ -50,5 +51,13 @@ public class Player extends Mob {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+	public int getLives() {
+		return lives;
+	}
+	
+	public int kill() {
+		lives = lives - 1;
+		return lives;
 	}
 }

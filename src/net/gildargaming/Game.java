@@ -162,7 +162,8 @@ public class Game extends Canvas implements Runnable {
 		player.render(screen);
 		invGroup.renderGroup(screen);
 		screen.render();
-		font.render("SCORE",screen, 10, 10);
+		font.render("SCORE " + player.getScore(),screen, 5, 5);
+		font.render("LIVES " + player.getLives(), screen, 175, 5);
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 			
@@ -222,8 +223,10 @@ public class Game extends Canvas implements Runnable {
 	public void resolveCollisions() {
 		//Check for collision with projectiles
 		for (Projectile p : level.projectileList) {
-			if (p.getType() == ProjectileType.ENEMY && p.collisionWith(player, 8, 18)) {
+			if (p.getType() == ProjectileType.ENEMY && p.collisionWith(player, 8, 0)) {
 				//System.out.println("Player collision detected");
+				player.kill();
+				p.remove();
 			} else if (p.getType() == ProjectileType.PLAYER) {
 				//Wall collision will be done no matter what type the projectile is.			
 
