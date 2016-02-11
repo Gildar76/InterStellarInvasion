@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import net.gildargaming.graphics.Font;
 import net.gildargaming.graphics.Screen;
+import net.gildargaming.input.Keyboard;
 import net.gildargaming.world.FixedWorld;
 
 public class GameScreen {

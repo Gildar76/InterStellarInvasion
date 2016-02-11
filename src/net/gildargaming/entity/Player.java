@@ -60,4 +60,9 @@ public class Player extends Mob {
 		lives = lives - 1;
 		return lives;
 	}
+	
+	public void revive() {
+		lives = 3;
+		
+	}
 }

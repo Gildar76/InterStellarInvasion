@@ -16,6 +16,7 @@ import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
 import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
+import net.gildargaming.gamescreens.GameMenuScreen;
 import net.gildargaming.gamescreens.GameOverScreen;
 import net.gildargaming.graphics.Animation;
 import net.gildargaming.graphics.Font;
@@ -62,7 +63,7 @@ public class Game extends Canvas implements Runnable {
 	public static final int ALPHA_COLOR = -65281;
 	public GameState state;
 	public GameOverScreen gameOverScreen;
-	
+	public GameMenuScreen menuScreen;
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -94,7 +95,23 @@ public class Game extends Canvas implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void restart() {
+		player.setScore(0);
+		player.revive();
+		//TODO: MOVE INVADERGROUP TO LEVEL
+		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
+		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
+			if (i % 2 == 0) {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );				
+			} else {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );								
+			}
+
+		}		
+		state = GameState.GAMERUNNING;
+		
+	}
 	public void initializeGame() {
 		this.startWindow();
 		playerShootSound = new SoundEffect("./res/sounds/playerMisile.wav");
@@ -109,6 +126,7 @@ public class Game extends Canvas implements Runnable {
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
 		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite, this.playerShootSound, this.playerExplosionSound);
+		//TODO: MOVE INVADERGROUP TO LEVEL
 		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
 			if (i % 2 == 0) {
@@ -118,10 +136,10 @@ public class Game extends Canvas implements Runnable {
 			}
 
 		}
-		System.out.println("initializing font sheet");
+
 		fontSheet = new Spritesheet("/fonts/arial.png");
 		font = new Font(fontSheet);
-		state = GameState.GAMERUNNING;
+		state = GameState.MENU;
 	}
 	//crates and opens the game window.
 	public void startWindow() {
@@ -160,12 +178,23 @@ public class Game extends Canvas implements Runnable {
 				gameOverScreen = new GameOverScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
 				return;
 				//CONtinue update on next go.
+
+			}
+			if (kb.space) {
+				restart();
+			}
+			
+		} else if (state == GameState.MENU) {
+
+			if (menuScreen == null) {
+				menuScreen = new GameMenuScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+				//CONtinue update on next go.
+			}
+			if (kb.space) {
+				state = GameState.GAMERUNNING;
 			}
 		}
-			
-		
-
-		
 	}
 	
 	public void render() {
@@ -190,6 +219,13 @@ public class Game extends Canvas implements Runnable {
 				//CONtinue update on next go.
 			}
 			gameOverScreen.render(screen);
+		}  else if (state == GameState.MENU) {
+			if (menuScreen == null) {
+				menuScreen = new GameMenuScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+				//CONtinue update on next go.
+			}
+			menuScreen.render(screen);
 		}
 		font.render("SCORE " + player.getScore(),screen, 5, 5);
 		font.render("LIVES " + player.getLives(), screen, 175, 5);
