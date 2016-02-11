@@ -16,6 +16,7 @@ import net.gildargaming.entity.Invadergroup;
 import net.gildargaming.entity.Player;
 import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
+import net.gildargaming.gamescreens.GameOverScreen;
 import net.gildargaming.graphics.Animation;
 import net.gildargaming.graphics.Font;
 import net.gildargaming.graphics.Screen;
@@ -59,6 +60,8 @@ public class Game extends Canvas implements Runnable {
 	public Spritesheet fontSheet;
 	public static final int ALPHA_COLOR2 = -8454017;
 	public static final int ALPHA_COLOR = -65281;
+	public GameState state;
+	public GameOverScreen gameOverScreen;
 	
 	//Default Constructor
 	public Game() {
@@ -118,6 +121,7 @@ public class Game extends Canvas implements Runnable {
 		System.out.println("initializing font sheet");
 		fontSheet = new Spritesheet("/fonts/arial.png");
 		font = new Font(fontSheet);
+		state = GameState.GAMERUNNING;
 	}
 	//crates and opens the game window.
 	public void startWindow() {
@@ -142,12 +146,26 @@ public class Game extends Canvas implements Runnable {
 	public void update() {
 		kb.updateKeyState();
 
+		
+		if (state == GameState.GAMERUNNING) {
+			
+		
+			player.update(elapsedTimeMilisec, level);
+			//player.render(screen);
+			invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
+			level.update(elapsedTimeMilisec);
+			resolveCollisions();			
+		} else if (state == GameState.GAMEOVER) {
+			if (gameOverScreen == null) {
+				gameOverScreen = new GameOverScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+				//CONtinue update on next go.
+			}
+		}
+			
+		
 
-		player.update(elapsedTimeMilisec, level);
-		//player.render(screen);
-		invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
-		level.update(elapsedTimeMilisec);
-		resolveCollisions();
+		
 	}
 	
 	public void render() {
@@ -158,10 +176,21 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		level.render(0,0,screen);
-		player.render(screen);
-		invGroup.renderGroup(screen);
-		screen.render();
+		if (state == GameState.GAMERUNNING) {
+		
+	
+			level.render(0,0,screen);
+			player.render(screen);
+			invGroup.renderGroup(screen);
+			screen.render();
+		} else if (state == GameState.GAMEOVER) {
+			if (gameOverScreen == null) {
+				gameOverScreen = new GameOverScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+				//CONtinue update on next go.
+			}
+			gameOverScreen.render(screen);
+		}
 		font.render("SCORE " + player.getScore(),screen, 5, 5);
 		font.render("LIVES " + player.getLives(), screen, 175, 5);
 		for (int i = 0; i < pixels.length; i++) {
@@ -169,7 +198,6 @@ public class Game extends Canvas implements Runnable {
 			
 		}
 		Graphics drawGraphics = buffer.getDrawGraphics();
-		drawGraphics.fillRect(0, 0, getWidth(), getHeight());
 		drawGraphics.drawImage(bImage, 0, 0, getWidth(), getHeight(), null);
 		drawGraphics.dispose();
 		buffer.show();
@@ -191,7 +219,7 @@ public class Game extends Canvas implements Runnable {
 		int numUpdates = 0;		
 		while (running) {
 			//Main game loop
-
+			
 			//Get current time to see if we need to update
 			long now = System.nanoTime();
 			delta += (now - prevTime) / tickTime;
@@ -225,8 +253,11 @@ public class Game extends Canvas implements Runnable {
 		for (Projectile p : level.projectileList) {
 			if (p.getType() == ProjectileType.ENEMY && p.collisionWith(player, 8, 0)) {
 				//System.out.println("Player collision detected");
-				player.kill();
+				int lives = player.kill();
 				p.remove();
+				if (lives < 1) {
+					state = GameState.GAMEOVER;
+				}
 			} else if (p.getType() == ProjectileType.PLAYER) {
 				//Wall collision will be done no matter what type the projectile is.			
 
