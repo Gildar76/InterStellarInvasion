@@ -1,6 +1,7 @@
 package net.gildargaming.entity;
 
 import net.gildargaming.Direction;
+import net.gildargaming.GameSettings;
 import net.gildargaming.ProjectileType;
 import net.gildargaming.audio.SoundEffect;
 import net.gildargaming.graphics.Screen;
@@ -13,20 +14,20 @@ public abstract class Mob extends Entity {
 	protected boolean moving = false;
 
 	protected double acceleration = 0.1;
-	protected double velocity = 0.1;
+	protected double velocity = GameSettings.INVADER_VELOCITY;
 	protected int width, height, right, bottom;
 
 	protected boolean clamp = false; //Setting this to true will allow the mob to leave the screen.
 	
 	protected Direction direction;
-	protected int shootDelay = 2;
+	protected double shootDelay = GameSettings.INVADER_SHOOT_DELAY;
 	protected double timeUntilNextShot;
 	protected Sprite projectileSprite;	
 	protected int timeSinceLastMove = 0;
 	protected ProjectileType projectileType = ProjectileType.ENEMY;
 	protected SoundEffect shootSound;
 	protected SoundEffect explosionSound;
-	
+	protected double projectileVelocity = 0.1;
 	public Mob(int x, int y, Sprite sprite, Sprite projectileSprite, SoundEffect shootSound, SoundEffect explosionSound) {
 		this(x,y,sprite);
 		this.projectileSprite = projectileSprite;
@@ -41,7 +42,7 @@ public abstract class Mob extends Entity {
 		this.sprite = sprite;
 		this.width = sprite.getSize();
 		this.height = sprite.getSize();
-
+		
 		
 	}
 	public void startMoving(Direction dir) {
@@ -73,7 +74,7 @@ public abstract class Mob extends Entity {
 		this.move(elapsedTimeMilisec);
 		
 		this.timeUntilNextShot -= elapsedTimeMilisec;
-		this.shoot(level, true, 180, 0.1);
+		this.shoot(level, true, 180, projectileVelocity);
 		
 	}
 	
@@ -114,13 +115,20 @@ public abstract class Mob extends Entity {
 		return height;
 		
 	}
-	
+	/**
+	 * 
+	 * @param level
+	 * @param useRandomDelay
+	 * @param angle
+	 * @param vel
+	 */
 	protected void shoot(FixedWorld level, boolean useRandomDelay, int angle, double vel) {
 		if (timeUntilNextShot > 0) return;
 		level.projectileList.add(new Projectile(x, y, projectileSprite , vel, angle, this.projectileType  ));
 		shootSound.play();
 		if (useRandomDelay) {
-			timeUntilNextShot = this.rand.nextInt(this.shootDelay + 1) * 1000;
+			timeUntilNextShot = (int)((this.rand.nextFloat() * this.shootDelay + 1) * 1000);
+			//timeUntilNextShot = this.rand.nextInt(this.shootDelay + 1) * 1000;
 
 		
 		} else {

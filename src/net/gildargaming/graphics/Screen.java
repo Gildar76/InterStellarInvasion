@@ -34,6 +34,13 @@ public class Screen {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param xp Xposition
+	 * @param yp Yposition
+	 * @param spr Sprite
+	 * Renders a sprite on to the screen
+	 */
 	public void renderObject(int xp, int yp, Sprite spr) {
 		xp -= xOffset;
 		yp -= yOffset;
@@ -52,6 +59,15 @@ public class Screen {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param xp Xposition
+	 * @param yp Yposition
+	 * @param size Size of the square to render
+	 * @param color Color of the square.
+	 * Renders a square of pixels on the screen.
+	 * 
+	 */
 	public void renderSquare(int xp, int yp, int size, int color) {
 		xp -= xOffset;
 		yp -= yOffset;

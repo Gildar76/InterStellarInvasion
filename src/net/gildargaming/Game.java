@@ -18,6 +18,7 @@ import net.gildargaming.entity.Projectile;
 import net.gildargaming.entity.Wall;
 import net.gildargaming.gamescreens.GameMenuScreen;
 import net.gildargaming.gamescreens.GameOverScreen;
+import net.gildargaming.gamescreens.GameScreen;
 import net.gildargaming.graphics.Animation;
 import net.gildargaming.graphics.Font;
 import net.gildargaming.graphics.Screen;
@@ -64,6 +65,8 @@ public class Game extends Canvas implements Runnable {
 	public GameState state;
 	public GameOverScreen gameOverScreen;
 	public GameMenuScreen menuScreen;
+	public GameScreen levelCompletedScreen;
+	public int difficulty = 1;
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -98,20 +101,47 @@ public class Game extends Canvas implements Runnable {
 
 	public void restart() {
 		player.setScore(0);
-		player.revive();
+		difficulty = 1;
+		
+
+		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
+		level.setDifficulty(difficulty);
+		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite, this.playerShootSound, this.playerExplosionSound);
+		//TODO: MOVE INVADERGROUP TO LEVEL
+		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		//TODO: MOVE INVADERGROUP TO LEVEL
 		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
 			if (i % 2 == 0) {
-				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );				
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );				
 			} else {
-				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );								
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );								
+			}
+
+		}		
+		state = GameState.MENU;
+		
+	}
+	
+	public void nextLevel() {
+
+		difficulty++;
+		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
+		level.setDifficulty(difficulty);
+		//TODO: MOVE INVADERGROUP TO LEVEL
+		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
+		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
+			if (i % 2 == 0) {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );				
+			} else {
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );								
 			}
 
 		}		
 		state = GameState.GAMERUNNING;
 		
 	}
+	
 	public void initializeGame() {
 		this.startWindow();
 		playerShootSound = new SoundEffect("./res/sounds/playerMisile.wav");
@@ -125,14 +155,15 @@ public class Game extends Canvas implements Runnable {
 		this.kb = new Keyboard();
 		addKeyListener(kb);
 		level = new FixedWorld("/background/stars.png", screen.getWidth(), screen.getHeight());
+		level.setDifficulty(difficulty);
 		player = new Player(screen.getWidth() / 2,screen.getHeight() - screen.getHeight() / 16,playerSprite, kb, level.playerProjectileSprite, this.playerShootSound, this.playerExplosionSound);
 		//TODO: MOVE INVADERGROUP TO LEVEL
 		invGroup = new Invadergroup(10, 25, 10, 10, GROUPSIZE);
 		for (int i = 0; i < GROUPSIZE * GROUPSIZE; i++) {
 			if (i % 2 == 0) {
-				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );				
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );				
 			} else {
-				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound );								
+				invGroup.addInvader(invaderSprite, level.invaderProjectileSprite, invaderShootSound, this.invaderExplosionSound, difficulty );								
 			}
 
 		}
@@ -163,8 +194,8 @@ public class Game extends Canvas implements Runnable {
 	
 	public void update() {
 		kb.updateKeyState();
-
-		
+		if (invGroup.invaders.size() == 0) state = GameState.LEVELCOMPLETED;
+		System.out.println(invGroup.invadorCount);
 		if (state == GameState.GAMERUNNING) {
 			
 		
@@ -183,7 +214,18 @@ public class Game extends Canvas implements Runnable {
 			if (kb.space) {
 				restart();
 			}
-			
+		} else if (state == GameState.LEVELCOMPLETED) {
+			if (levelCompletedScreen == null) {
+				levelCompletedScreen = new GameScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+			}
+
+			if (kb.space) {
+				state = GameState.GAMERUNNING;
+				nextLevel();	
+				
+				
+			}		
 		} else if (state == GameState.MENU) {
 
 			if (menuScreen == null) {
@@ -205,9 +247,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		screen.clear();
-		if (state == GameState.GAMERUNNING) {
-		
-	
+		if (state == GameState.GAMERUNNING) {	
 			level.render(0,0,screen);
 			player.render(screen);
 			invGroup.renderGroup(screen);
@@ -219,6 +259,16 @@ public class Game extends Canvas implements Runnable {
 				//CONtinue update on next go.
 			}
 			gameOverScreen.render(screen);
+		} else if (state == GameState.LEVELCOMPLETED) {
+			if (levelCompletedScreen == null) {
+				levelCompletedScreen = new GameScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
+				return;
+			}
+			levelCompletedScreen.font.render("LEVEL BEATEN!", screen, 100, 20);
+			levelCompletedScreen.font.render("PRESS SPACE", screen, 100, 200);
+			levelCompletedScreen.render(screen);
+			levelCompletedScreen.font.render("LEVEL BEATEN!", screen, 100, 20);
+			levelCompletedScreen.font.render("PRESS SPACE", screen, 100, 200);
 		}  else if (state == GameState.MENU) {
 			if (menuScreen == null) {
 				menuScreen = new GameMenuScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
@@ -299,7 +349,7 @@ public class Game extends Canvas implements Runnable {
 
 				for (Invader inv : this.invGroup.invaders) {
 					if (p.collisionWith(inv, 5, 10)) {
-						player.setScore(player.getScore()+1);
+						player.setScore(player.getScore()+1*difficulty);
 						
 						Game.invaderExplosionSound.play();
 						//Start explosion

@@ -15,7 +15,7 @@ import net.gildargaming.graphics.Sprite;
 import net.gildargaming.graphics.Spritesheet;
 
 public class FixedWorld extends World {
-	
+	private int difficulty;
 	public int[] pixels;
 	public String path;
 	public ArrayList<Projectile> projectileList;
@@ -115,5 +115,13 @@ public class FixedWorld extends World {
 		}
 	}
 
-
+	public int getDifficulty() {
+		return difficulty;	
+	}
+	
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+	
 }
+
