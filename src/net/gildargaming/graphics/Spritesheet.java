@@ -26,13 +26,12 @@ public class Spritesheet {
 	}
 	private void load() {
 		try {
-			//I can't comprehend what the .class does except return a class object (sort of)
 			BufferedImage img =	ImageIO.read(Spritesheet.class.getResource(path));
 			//We now should have the image loaded. Create a pixel array.
 			width = img.getWidth();
 			height = img.getHeight();
-			System.out.println(this.path);
-			System.out.print(width + "," + height);
+			//System.out.println(this.path);
+			//System.out.print(width + "," + height);
 			pixels = new int[width*height];			
 			img.getRGB(0, 0, width, height, pixels, 0, width);
 			

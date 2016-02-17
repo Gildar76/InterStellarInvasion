@@ -8,15 +8,12 @@ public class Font {
 								"abcdefghijklm" + //
 								"nopqrstuvwxyz" + //
 								"0123456789.,''" + //
-								"'\"\";:!@$%()-+";
+								"\"\";:!@$%()-+";
 	public Font(Spritesheet sheet) {
 		this.sheet = sheet;
-		sprites = this.sheet.split(16, 16);
+		sprites = this.sheet.split(sheet.getWidth() / 13, sheet.getHeight() / 6);
 		for (Sprite s : sprites) {
 			s.replaceColor(0xff000000, 0xffffffff);
-			//s.replaceColor(-16777216, 0xffffffff);
-			//s.replaceColor(-65281, 0xffffffff);
-			//s.replaceColor(0, 0xffffffff);
 		}
 		
 	}

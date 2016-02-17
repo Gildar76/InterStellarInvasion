@@ -62,11 +62,16 @@ public class Game extends Canvas implements Runnable {
 	public Spritesheet fontSheet;
 	public static final int ALPHA_COLOR2 = -8454017;
 	public static final int ALPHA_COLOR = -65281;
-	public GameState state;
+	public static GameState state;
 	public GameOverScreen gameOverScreen;
 	public GameMenuScreen menuScreen;
 	public GameScreen levelCompletedScreen;
 	public int difficulty = 1;
+
+	public Font fontSmall;
+	public Spritesheet fontSheetsmall;
+	
+	
 	//Default Constructor
 	public Game() {
 		screen = new Screen(width,height);
@@ -169,7 +174,10 @@ public class Game extends Canvas implements Runnable {
 		}
 
 		fontSheet = new Spritesheet("/fonts/arial.png");
+		fontSheetsmall = new Spritesheet("/fonts/arial16.png");
 		font = new Font(fontSheet);
+		fontSmall = new Font(fontSheetsmall);
+		
 		state = GameState.MENU;
 	}
 	//crates and opens the game window.
@@ -197,13 +205,14 @@ public class Game extends Canvas implements Runnable {
 		if (invGroup.invaders.size() == 0) state = GameState.LEVELCOMPLETED;
 		System.out.println(invGroup.invadorCount);
 		if (state == GameState.GAMERUNNING) {
-			
-		
 			player.update(elapsedTimeMilisec, level);
-			//player.render(screen);
 			invGroup.updateGroup(elapsedTimeMilisec, 0, screen.getWidth(), level);
 			level.update(elapsedTimeMilisec);
-			resolveCollisions();			
+			resolveCollisions();
+		} else if (state == GameState.PLAYERDEAD) {
+			if (kb.enter) state = GameState.GAMERUNNING;
+			//resolveCollisions();
+			level.update(elapsedTimeMilisec);
 		} else if (state == GameState.GAMEOVER) {
 			if (gameOverScreen == null) {
 				gameOverScreen = new GameOverScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
@@ -252,6 +261,15 @@ public class Game extends Canvas implements Runnable {
 			player.render(screen);
 			invGroup.renderGroup(screen);
 			screen.render();
+		}else if (state == GameState.PLAYERDEAD) {
+
+			level.render(0,0,screen);
+			//player.render(screen);
+			invGroup.renderGroup(screen);
+			screen.render();
+			//font.render("YOU ARE DEAD!", screen, 50, 50);
+			fontSmall.render("PRESS ENTER ", screen, 50, 150);
+			fontSmall.render("TO CONTINUE", screen, 50, 175);
 		} else if (state == GameState.GAMEOVER) {
 			if (gameOverScreen == null) {
 				gameOverScreen = new GameOverScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
@@ -264,11 +282,10 @@ public class Game extends Canvas implements Runnable {
 				levelCompletedScreen = new GameScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
 				return;
 			}
-			levelCompletedScreen.font.render("LEVEL BEATEN!", screen, 100, 20);
-			levelCompletedScreen.font.render("PRESS SPACE", screen, 100, 200);
+
 			levelCompletedScreen.render(screen);
-			levelCompletedScreen.font.render("LEVEL BEATEN!", screen, 100, 20);
-			levelCompletedScreen.font.render("PRESS SPACE", screen, 100, 200);
+			levelCompletedScreen.font.render("LEVEL BEATEN!", screen, 50, 150);
+			levelCompletedScreen.font.render("PRESS SPACE", screen, 50, 200);
 		}  else if (state == GameState.MENU) {
 			if (menuScreen == null) {
 				menuScreen = new GameMenuScreen(screen.getWidth(), screen.getHeight(), "/background/stars.png", font);
@@ -343,6 +360,10 @@ public class Game extends Canvas implements Runnable {
 				p.remove();
 				if (lives < 1) {
 					state = GameState.GAMEOVER;
+				} else {
+					state = GameState.PLAYERDEAD;
+					explosionList.add(new Animation(player.getX(), player.getY(), 16, 16, 0, 2, 8, mobsheet, 0.05));
+					
 				}
 			} else if (p.getType() == ProjectileType.PLAYER) {
 				//Wall collision will be done no matter what type the projectile is.			

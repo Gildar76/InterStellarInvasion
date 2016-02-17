@@ -21,7 +21,7 @@ public class GameOverScreen extends GameScreen {
 
 	public void render(Screen screen) {
 		super.render(screen);
-		font.render("GAME OVER!", screen, width/2-64, height/2);
-		
+		font.render("GAME OVER!", screen, width/2-100, height/2-100);
+		font.render("PRESS ENTER ", screen, width/2-110, height/2-50);		
 	}
 }
